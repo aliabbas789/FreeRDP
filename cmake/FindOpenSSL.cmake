@@ -27,6 +27,8 @@
 if (UNIX AND NOT ANDROID)
   find_package(PkgConfig QUIET)
   pkg_check_modules(_OPENSSL QUIET openssl)
+  message("xxxx _OPENSSL_INCLUDEDIR=${_OPENSSL_INCLUDEDIR}")
+  message("xxxx _OPENSSL_LIBDIR=${_OPENSSL_LIBDIR}")
 endif (UNIX AND NOT ANDROID)
 
 # http://www.slproweb.com/products/Win32OpenSSL.html
