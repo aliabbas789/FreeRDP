@@ -52,7 +52,7 @@ FIND_PATH(OPENSSL_INCLUDE_DIR
     openssl/ssl.h
   PATH_SUFFIXES
 	"include"
-  HINTS ${_OPENSSL_ROOT_HINTS} ${_OPENSSL_INCLUDEDIR}
+  HINTS ${_OPENSSL_ROOT_HINTS} ${_OPENSSL_INCLUDE_DIRS}
   PATHS ${_OPENSSL_ROOT_PATHS}
   PATH_SUFFIXES
     include
@@ -211,7 +211,7 @@ ELSEIF(WIN32 AND NOT CYGWIN)
         libeay32
         libcrypto
         libcrypto-1_1
-      HINTS ${_OPENSSL_ROOT_HINTS} ${_OPENSSL_LIBDIR}
+      HINTS ${_OPENSSL_ROOT_HINTS} ${_OPENSSL_LIBBRARY_DIRS}
       PATHS ${_OPENSSL_ROOT_PATHS}
       PATH_SUFFIXES
         lib
@@ -222,7 +222,7 @@ ELSEIF(WIN32 AND NOT CYGWIN)
         ssleay32
         libssl
         libssl-1_1
-      HINTS ${_OPENSSL_ROOT_HINTS} ${_OPENSSL_LIBDIR}
+      HINTS ${_OPENSSL_ROOT_HINTS} ${_OPENSSL_LIBRARY_DIRS}
       PATHS ${_OPENSSL_ROOT_PATHS}
       PATH_SUFFIXES
         lib
@@ -239,7 +239,7 @@ ELSE(WIN32 AND NOT CYGWIN)
       ssleay32
       libssl-1_1
       "ssleay32${MSVC_RUNTIME_SUFFIX}"
-    HINTS ${_OPENSSL_ROOT_HINTS} ${_OPENSSL_LIBDIR}
+    HINTS ${_OPENSSL_ROOT_HINTS} ${_OPENSSL_LIBRARY_DIRS}
     PATHS ${_OPENSSL_ROOT_PATHS}
     PATH_SUFFIXES
       lib
@@ -249,14 +249,12 @@ ELSE(WIN32 AND NOT CYGWIN)
     NAMES
       crypto
       libcrypto-1_1
-    HINTS ${_OPENSSL_ROOT_HINTS} ${_OPENSSL_LIBDIR}
+    HINTS ${_OPENSSL_ROOT_HINTS} ${_OPENSSL_LIBRARY_DIRS}
     PATHS ${_OPENSSL_ROOT_PATHS}
     PATH_SUFFIXES
       lib
   )
 
-message("xxxx aaa OPENSSL_SSL_LIBRARIES=${OPENSSL_SSL_LIBRARIES}")
-message("xxxx aaa OPENSSL_CRYPTO_LIBRARIES=${OPENSSL_CRYPTO_LIBRARIES}")
   MARK_AS_ADVANCED(OPENSSL_CRYPTO_LIBRARY OPENSSL_SSL_LIBRARY)
 
   # compat defines
@@ -349,9 +347,11 @@ if (OPENSSL_VERSION)
       "Could NOT find OpenSSL, try to set the path to OpenSSL root folder in the system variable OPENSSL_ROOT_DIR"
   )
 else (OPENSSL_VERSION)
-  find_package_handle_standard_args(OpenSSL "Could NOT find OpenSSL, try to set the path to OpenSSL root folder in the system variable OPENSSL_ROOT_DIR"
-    OPENSSL_LIBRARIES
-    OPENSSL_INCLUDE_DIR
+  find_package_handle_standard_args(OpenSSL
+	  REQUIRED_VARS
+	    OPENSSL_LIBRARIES
+	    OPENSSL_INCLUDE_DIR
+	  FAIL_MESSAGE "Could NOT find OpenSSL, try to set the path to OpenSSL root folder in the system variable OPENSSL_ROOT_DIR"
   )
 endif (OPENSSL_VERSION)
 
