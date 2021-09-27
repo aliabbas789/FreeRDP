@@ -27,8 +27,6 @@
 if (UNIX AND NOT ANDROID)
   find_package(PkgConfig QUIET)
   pkg_check_modules(_OPENSSL QUIET openssl)
-  message("xxxx _OPENSSL_INCLUDEDIR=${_OPENSSL_INCLUDEDIR}")
-  message("xxxx _OPENSSL_LIBDIR=${_OPENSSL_LIBDIR}")
 endif (UNIX AND NOT ANDROID)
 
 # http://www.slproweb.com/products/Win32OpenSSL.html
@@ -48,27 +46,17 @@ SET(_OPENSSL_ROOT_PATHS
   "/obj/local/armeabi/"
   "/obj/local/armeabi-v7a/"
   )
-SET(_OPENSSL_ROOT_HINTS_AND_PATHS
-  HINTS ${_OPENSSL_ROOT_HINTS}
-  PATHS ${_OPENSSL_ROOT_PATHS}
-  )
-
-message("xxx OPENSSL_ROOT_DIR=${OPENSSL_ROOT_DIR}")
-message("xxx _OPENSSL_ROOT_HINTS_AND_PATHS=${_OPENSSL_ROOT_HINTS_AND_PATHS}")
 
 FIND_PATH(OPENSSL_INCLUDE_DIR
   NAMES
     openssl/ssl.h
   PATH_SUFFIXES
 	"include"
-  ${_OPENSSL_ROOT_HINTS_AND_PATHS}
-  HINTS
-    ${_OPENSSL_INCLUDEDIR}
+  HINTS ${_OPENSSL_ROOT_HINTS} ${_OPENSSL_INCLUDEDIR}
+  PATHS ${_OPENSSL_ROOT_PATHS}
   PATH_SUFFIXES
     include
 )
-
-message("xxxx aaa OPENSSL_INCLUDE_DIR=${OPENSSL_INCLUDE_DIR}")
 
 IF(MSVC)
   if(${MSVC_RUNTIME} STREQUAL "static")
@@ -82,7 +70,8 @@ IF(ANDROID)
     FIND_LIBRARY(SSL_LIBRARY
       NAMES
         "ssl"
-      ${_OPENSSL_ROOT_HINTS_AND_PATHS}
+      HINTS ${_OPENSSL_ROOT_HINTS}
+      PATHS ${_OPENSSL_ROOT_PATHS}
       PATH_SUFFIXES
         "lib"
     )
@@ -90,7 +79,8 @@ IF(ANDROID)
     FIND_LIBRARY(CRYPTO_LIBRARY
       NAMES
         "crypto"
-      ${_OPENSSL_ROOT_HINTS_AND_PATHS}
+      HINTS ${_OPENSSL_ROOT_HINTS}
+      PATHS ${_OPENSSL_ROOT_PATHS}
       PATH_SUFFIXES
         "lib"
     )
@@ -126,7 +116,8 @@ ELSEIF(WIN32 AND NOT CYGWIN)
         libeay32
         libcrypto
         libcrypto-1_1
-      ${_OPENSSL_ROOT_HINTS_AND_PATHS}
+      HINTS ${_OPENSSL_ROOT_HINTS}
+      PATHS ${_OPENSSL_ROOT_PATHS}
       PATH_SUFFIXES
         ${MSVC_RUNTIME_PATH_SUFFIX}
         "lib"
@@ -140,7 +131,8 @@ ELSEIF(WIN32 AND NOT CYGWIN)
         libeay32
         libcrypto
         libcrypto-1_1
-      ${_OPENSSL_ROOT_HINTS_AND_PATHS}
+      HINTS ${_OPENSSL_ROOT_HINTS}
+      PATHS ${_OPENSSL_ROOT_PATHS}
       PATH_SUFFIXES
         ${MSVC_RUNTIME_PATH_SUFFIX}
         "lib"
@@ -155,7 +147,8 @@ ELSEIF(WIN32 AND NOT CYGWIN)
         ssl
         libssl
         libssl-1_1
-      ${_OPENSSL_ROOT_HINTS_AND_PATHS}
+      HINTS ${_OPENSSL_ROOT_HINTS}
+      PATHS ${_OPENSSL_ROOT_PATHS}
       PATH_SUFFIXES
         ${MSVC_RUNTIME_PATH_SUFFIX}
         "lib"
@@ -170,7 +163,8 @@ ELSEIF(WIN32 AND NOT CYGWIN)
         ssl
         libssl
         libssl-1_1
-      ${_OPENSSL_ROOT_HINTS_AND_PATHS}
+      HINTS ${_OPENSSL_ROOT_HINTS}
+      PATHS ${_OPENSSL_ROOT_PATHS}
       PATH_SUFFIXES
         ${MSVC_RUNTIME_PATH_SUFFIX}
         "lib"
@@ -190,7 +184,8 @@ ELSEIF(WIN32 AND NOT CYGWIN)
       NAMES
         libeay32
         libcrypto
-      ${_OPENSSL_ROOT_HINTS_AND_PATHS}
+      HINTS ${_OPENSSL_ROOT_HINTS}
+      PATHS ${_OPENSSL_ROOT_PATHS}
       PATH_SUFFIXES
         "lib"
         "lib/MinGW"
@@ -200,7 +195,8 @@ ELSEIF(WIN32 AND NOT CYGWIN)
       NAMES
         ssleay32
         libssl
-      ${_OPENSSL_ROOT_HINTS_AND_PATHS}
+      HINTS ${_OPENSSL_ROOT_HINTS}
+      PATHS ${_OPENSSL_ROOT_PATHS}
       PATH_SUFFIXES
         "lib"
         "lib/MinGW"
@@ -215,9 +211,8 @@ ELSEIF(WIN32 AND NOT CYGWIN)
         libeay32
         libcrypto
         libcrypto-1_1
-      HINTS
-        ${_OPENSSL_LIBDIR}
-      ${_OPENSSL_ROOT_HINTS_AND_PATHS}
+      HINTS ${_OPENSSL_ROOT_HINTS} ${_OPENSSL_LIBDIR}
+      PATHS ${_OPENSSL_ROOT_PATHS}
       PATH_SUFFIXES
         lib
     )
@@ -227,9 +222,8 @@ ELSEIF(WIN32 AND NOT CYGWIN)
         ssleay32
         libssl
         libssl-1_1
-      HINTS
-        ${_OPENSSL_LIBDIR}
-      ${_OPENSSL_ROOT_HINTS_AND_PATHS}
+      HINTS ${_OPENSSL_ROOT_HINTS} ${_OPENSSL_LIBDIR}
+      PATHS ${_OPENSSL_ROOT_PATHS}
       PATH_SUFFIXES
         lib
     )
@@ -245,9 +239,8 @@ ELSE(WIN32 AND NOT CYGWIN)
       ssleay32
       libssl-1_1
       "ssleay32${MSVC_RUNTIME_SUFFIX}"
-    ${_OPENSSL_ROOT_HINTS_AND_PATHS}
-    HINTS
-      ${_OPENSSL_LIBDIR}
+    HINTS ${_OPENSSL_ROOT_HINTS} ${_OPENSSL_LIBDIR}
+    PATHS ${_OPENSSL_ROOT_PATHS}
     PATH_SUFFIXES
       lib
   )
@@ -256,9 +249,8 @@ ELSE(WIN32 AND NOT CYGWIN)
     NAMES
       crypto
       libcrypto-1_1
-    ${_OPENSSL_ROOT_HINTS_AND_PATHS}
-    HINTS
-      ${_OPENSSL_LIBDIR}
+    HINTS ${_OPENSSL_ROOT_HINTS} ${_OPENSSL_LIBDIR}
+    PATHS ${_OPENSSL_ROOT_PATHS}
     PATH_SUFFIXES
       lib
   )
