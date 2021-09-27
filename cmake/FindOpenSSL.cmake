@@ -58,9 +58,9 @@ FIND_PATH(OPENSSL_INCLUDE_DIR
     openssl/ssl.h
   PATH_SUFFIXES
 	"include"
+  ${_OPENSSL_ROOT_HINTS_AND_PATHS}
   HINTS
     ${_OPENSSL_INCLUDEDIR}
-  ${_OPENSSL_ROOT_HINTS_AND_PATHS}
   PATH_SUFFIXES
     include
 )
@@ -240,9 +240,9 @@ ELSE(WIN32 AND NOT CYGWIN)
       ssleay32
       libssl-1_1
       "ssleay32${MSVC_RUNTIME_SUFFIX}"
+    ${_OPENSSL_ROOT_HINTS_AND_PATHS}
     HINTS
       ${_OPENSSL_LIBDIR}
-    ${_OPENSSL_ROOT_HINTS_AND_PATHS}
     PATH_SUFFIXES
       lib
   )
@@ -251,9 +251,9 @@ ELSE(WIN32 AND NOT CYGWIN)
     NAMES
       crypto
       libcrypto-1_1
+    ${_OPENSSL_ROOT_HINTS_AND_PATHS}
     HINTS
       ${_OPENSSL_LIBDIR}
-    ${_OPENSSL_ROOT_HINTS_AND_PATHS}
     PATH_SUFFIXES
       lib
   )
